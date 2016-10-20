@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Server {
 
@@ -21,15 +18,13 @@ public class Server {
                 String inputString = new String(receivePacket.getData());
                 System.out.println("RECEIVED: " + inputString);
                 String outputString = "";
-                Queue<String> characters = new LinkedList<>();
-                characters.addAll(Arrays.asList(inputString.split("")));
-                while (!characters.isEmpty()) {
-                    String odd = characters.poll();
-                    String even = characters.poll();
-                    outputString = outputString +
-                            (even == null ? "" : even) +
-                            (odd == null ? "" : odd);
-                }
+
+                char[] characters = inputString.trim().toCharArray();
+                if (characters.length > 15) {
+                    for (char character : characters)
+                        if (character < 97 || character > 122) outputString = outputString + character;
+                } else outputString = inputString;
+
                 InetAddress ipAddress = receivePacket.getAddress();
                 int port = receivePacket.getPort();
                 sendData = outputString.getBytes();
