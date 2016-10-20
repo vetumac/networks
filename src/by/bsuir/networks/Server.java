@@ -9,10 +9,10 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         DatagramSocket datagramSocket = new DatagramSocket(9090);
-        byte[] receiveData = new byte[1024];
-        byte[] sendData;
         try {
             while (true) {
+                byte[] receiveData = new byte[1024];
+                byte[] sendData;
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 datagramSocket.receive(receivePacket);
                 String inputString = new String(receivePacket.getData());
