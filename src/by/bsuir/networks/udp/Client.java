@@ -1,11 +1,9 @@
-package by.bsuir.networks;
+package by.bsuir.networks.udp;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {

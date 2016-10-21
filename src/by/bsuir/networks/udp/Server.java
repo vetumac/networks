@@ -1,4 +1,4 @@
-package by.bsuir.networks;
+package by.bsuir.networks.udp;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
