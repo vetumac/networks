@@ -1,34 +1,41 @@
 package by.bsuir.networks.tcp;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
 
     public static void main(String[] args) throws IOException {
 
-        try (Socket clientSocket = new Socket("localhost", 9090)) {
+        try (ServerSocket serverSocket = new ServerSocket(9090);
+             Socket clientSocket = serverSocket.accept()) {
 
-            while (true) {
-                String inputString;
 
-                try (InputStream in = clientSocket.getInputStream();
-                     BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-                    inputString = reader.readLine();
-                }
-                System.out.println("Input string: " + inputString);
-                String[] coordinates = inputString.split(";");
-                Double x = Double.parseDouble(coordinates[0]);
-                Double y = Double.parseDouble(coordinates[1]);
+            try (InputStream in = clientSocket.getInputStream();
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                 OutputStream os = clientSocket.getOutputStream();
+                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os))) {
+                while (true) {
+                    String inputString = reader.readLine();
+                    System.out.println("Input string: " + inputString);
+                    String[] coordinates = inputString.split(";");
+                    Double x = Double.parseDouble(coordinates[0]);
+                    Double y = Double.parseDouble(coordinates[1]);
 
-                String outputString = null;
-                try (OutputStream os = clientSocket.getOutputStream();
-                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os))) {
-                    writer.write(outputString);
+                    String outputString = "Point on the board";
+                    if (x > 0)
+                        if (y > 0) outputString = "1";
+                        else if (y < 0) outputString = "4";
+                    if (x < 0)
+                        if (y > 0) outputString = "2";
+                        else if (y < 0) outputString = "3";
+
+                    writer.write(outputString + "\n");
                     writer.flush();
-                }
 
-                System.out.println(inputString);
+                    System.out.println("Output string: " + outputString);
+                }
             }
         }
     }
