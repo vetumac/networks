@@ -20,9 +20,9 @@ public class Server {
                 String outputString = "";
 
                 char[] characters = inputString.trim().toCharArray();
-                if (characters.length > 15) {
+                if (characters.length % 3 == 0) {
                     for (char character : characters)
-                        if (character < 97 || character > 122) outputString = outputString + character;
+                        if (!(character % 3 == 0)) outputString = outputString + character;
                 } else outputString = inputString;
 
                 InetAddress ipAddress = receivePacket.getAddress();
