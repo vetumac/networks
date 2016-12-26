@@ -11,7 +11,6 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(9090);
              Socket clientSocket = serverSocket.accept()) {
 
-
             try (InputStream in = clientSocket.getInputStream();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                  OutputStream os = clientSocket.getOutputStream();
@@ -19,17 +18,12 @@ public class Server {
                 while (true) {
                     String inputString = reader.readLine();
                     System.out.println("Input string: " + inputString);
-                    String[] coordinates = inputString.split(";");
-                    Double x = Double.parseDouble(coordinates[0]);
-                    Double y = Double.parseDouble(coordinates[1]);
+                    String[] expression = inputString.split(";");
+                    String operation = expression[0];
+                    Double num1 = Double.parseDouble(expression[1]);
+                    Double num2 = Double.parseDouble(expression[2]);
 
-                    String outputString = "Point on the board";
-                    if (x > 0)
-                        if (y > 0) outputString = "1";
-                        else if (y < 0) outputString = "4";
-                    if (x < 0)
-                        if (y > 0) outputString = "2";
-                        else if (y < 0) outputString = "3";
+                    String outputString = String.valueOf(calculate(operation, num1, num2));
 
                     writer.write(outputString + "\n");
                     writer.flush();
@@ -38,5 +32,19 @@ public class Server {
                 }
             }
         }
+    }
+
+    private static Double calculate(String operation, Double num1, Double num2) {
+        switch (operation) {
+            case "+":
+                return num1 + num2;
+            case "-":
+                return num1 - num2;
+            case "*":
+                return num1 * num2;
+            case "/":
+                return num1 / num2;
+        }
+        return null;
     }
 }
